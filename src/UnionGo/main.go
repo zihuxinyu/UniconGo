@@ -30,6 +30,7 @@ func init() {
 
 func main() {
 	orm.Debug = true
+	beego.SessionOn=true
 	beego.AutoRouter(&controllers.MainController{})
 	beego.Run()
 

@@ -1,17 +1,18 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/Library"
 	. "UnionGo/models/portal_user"
 )
 
 type MainController struct {
-	beego.Controller
+	BaseController
 }
 
 func (this *MainController) Index() {
+	s:=NewGuid()
+	Log(s)
 	this.TplNames = "index.html"
 	this.Render()
 }
