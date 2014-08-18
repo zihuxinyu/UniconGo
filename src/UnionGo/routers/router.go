@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"quickstart/controllers"
+	"UnionGo/controllers"
 	"github.com/astaxie/beego"
 )
 

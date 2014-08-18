@@ -3,7 +3,7 @@ package portal_user
 import (
 	"github.com/astaxie/beego/orm"
 	"time"
-	. "quickstart/Library"
+	. "UnionGo/Library"
 )
 
 type Portal_user struct{

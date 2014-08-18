@@ -1,4 +1,4 @@
-package test
+package tests
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"testing"
 	"runtime"
 	"path/filepath"
-	_ "quickstart/routers"
+	_ "UnionGo/routers"
 
 	"github.com/astaxie/beego"
 	. "github.com/smartystreets/goconvey/convey"

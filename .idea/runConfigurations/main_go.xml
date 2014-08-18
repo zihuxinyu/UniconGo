@@ -4,11 +4,11 @@
     <option name="saveOutputToFile" value="false" />
     <option name="showConsoleOnStdErr" value="false" />
     <option name="showConsoleOnStdOut" value="false" />
-    <option name="scriptName" value="$PROJECT_DIR$/src/quickstart/main.go" />
+    <option name="scriptName" value="$PROJECT_DIR$/src/UnionGo/main.go" />
     <option name="scriptArguments" value="" />
     <option name="builderArguments" value="" />
     <option name="goBuildBeforeRun" value="true" />
-    <option name="goOutputDir" value="$PROJECT_DIR$/src/quickstart" />
+    <option name="goOutputDir" value="$PROJECT_DIR$/src/UnionGo" />
     <option name="workingDir" value="$PROJECT_DIR$" />
     <option name="envVars" value="" />
     <option name="goVetEnabled" value="false" />

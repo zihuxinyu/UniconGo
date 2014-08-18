@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	. "quickstart/Library"
-	. "quickstart/models/portal_user"
+	. "UnionGo/Library"
+	. "UnionGo/models/portal_user"
 )
 
 type MainController struct {

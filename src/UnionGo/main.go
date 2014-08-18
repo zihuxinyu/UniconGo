@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "quickstart/routers"
+	_ "UnionGo/routers"
 	"github.com/astaxie/beego"
-	"quickstart/controllers"
+	"UnionGo/controllers"
 	"github.com/astaxie/beego/orm"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql" // import your used driver
