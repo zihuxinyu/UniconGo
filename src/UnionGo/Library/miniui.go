@@ -38,8 +38,8 @@ func SaveMiniuiData(h interface {},data string){
 	vt := reflect.TypeOf(h)
 
 
-	for k, v := range s.List {
-		fmt.Println(k, v["_state"], v)
+	for _, v := range s.List {
+		//fmt.Println(k, v["_state"], v)
 		m := make(orm.Params)
 		for i := 0; i < vt.NumField(); i++ {
 			f := vt.Field(i)
@@ -58,7 +58,7 @@ func SaveMiniuiData(h interface {},data string){
 				}
 
 			}
-			fmt.Println(f.Name, v[f.Name])
+			//fmt.Println(f.Name, v[f.Name])
 		}
 
 		num, err := o.QueryTable(vt.Name()).Filter("Guid", v["Guid"]).Update(m)

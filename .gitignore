@@ -24,3 +24,6 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+src/UnionGo/.idea
+src/UnionGo/conf/app.conf
