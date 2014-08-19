@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"os"
 	"os/exec"
+	"fmt"
 )
 // 分离文件名与扩展名(包含.)
 func SplitFilename(filename string) (baseName, ext string) {

@@ -15,6 +15,7 @@ import (
 	"crypto/cipher"
 	"crypto/sha1"
 	"net/url"
+	"bytes"
 )
 
 // Guid

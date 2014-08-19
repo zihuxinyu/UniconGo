@@ -10,6 +10,7 @@ var (
 	brRe, _ = regexp.Compile("<br.*?>")
 	tagRe, _ = regexp.Compile("<.*?>")
 )
+
 func StripTags(html string) string {
 	html = lowerRe.ReplaceAllStringFunc(html, strings.ToLower)
 	html = strings.Replace(html, "\n", " ", -1)
@@ -48,37 +49,48 @@ func Html2str(html string) string {
 	src = re.ReplaceAllString(src, "\n")
 	return strings.TrimSpace(src)
 }
-// 按字节截取字符串 utf-8不乱码
-func Substr(str string, length int64) string {
-	bs := []byte(str)[:length]
-	bl := 0
-	for i := len(bs) - 1; i >= 0; i-- {
-		switch {
-		case bs[i] >= 0 && bs[i] <= 127:
-			return string(bs[:i+1])
-		case bs[i] >= 128 && bs[i] <= 191:
-			bl++
-		case bs[i] >= 192 && bs[i] <= 253:
-			cl := 0
-			switch {
-			case bs[i]&252 == 252:
-				cl = 6
-			case bs[i]&248 == 248:
-				cl = 5
-			case bs[i]&240 == 240:
-				cl = 4
-			case bs[i]&224 == 224:
-				cl = 3
-			default:
-				cl = 2
-			}
-			if bl+1 == cl {
-				return string(bs[:i+cl])
-			}
-			return string(bs[:i])
-		}
+
+// 以byte来截取
+func SubstringByte(str string, start int) string {
+	return substr(str, start, len(str)-start, false)
+}
+func Substring(str string, start int) string {
+	return substr(str, start, len(str)-start, true)
+}
+func Substr(str string, start, length int) string {
+	return substr(str, start, length, true)
+}
+func substr(str string, start, length int, isRune bool) string {
+	rs := []rune(str)
+	rs2 := []byte(str)
+	rl := len(rs)
+	if !isRune {
+		rl = len(rs2)
 	}
-	return ""
+	end := 0
+	if start < 0 {
+		start = rl - 1 + start
+	}
+	end = start + length
+	if start > end {
+		start, end = end, start
+	}
+	if start < 0 {
+		start = 0
+	}
+	if start > rl {
+		start = rl
+	}
+	if end < 0 {
+		end = 0
+	}
+	if end > rl {
+		end = rl
+	}
+	if isRune {
+		return string(rs[start:end])
+	}
+	return string(rs2[start:end])
 }
 
 //列表是否包含给定项
