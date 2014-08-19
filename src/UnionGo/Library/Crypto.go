@@ -17,22 +17,22 @@ import (
 	"net/url"
 )
 
-// 字符串
-// md5
-func Md5(s string) string {
-	h := md5.New()
-	h.Write([]byte(s))
-	return hex.EncodeToString(h.Sum(nil))
-}
 // Guid
 func NewGuid() string {
 	b := make([]byte, 48)
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		return ""
 	}
-	return Md5(base64.URLEncoding.EncodeToString(b))
+	return MD5(base64.URLEncoding.EncodeToString(b))
 }
-
+// 后面加个str生成之, 更有保障, 确保唯一
+func NewGuidWith(str string) string {
+	b := make([]byte, 48)
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
+		return ""
+	}
+	return MD5(base64.URLEncoding.EncodeToString([]byte(string(b) + str)))
+}
 
 
 var key = MD5byte("&^&*^&*$##%#@%$#@%$@$#@$%@")
@@ -116,14 +116,7 @@ func UrlEncode(s string) string {
 	return url.QueryEscape(s)
 }
 
-// 后面加个str生成之, 更有保障, 确保唯一
-func NewGuidWith(str string) string {
-	b := make([]byte, 48)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return ""
-	}
-	return Md5(base64.URLEncoding.EncodeToString([]byte(string(b) + str)))
-}
+
 
 // 随机密码
 // num 几位
@@ -150,4 +143,22 @@ func RandomPwd(num int) string {
 		str += string(chars[x])
 	}
 	return str
+}
+//生成随机字符串
+func RandomString(num int) string {
+	var result bytes.Buffer
+	var temp string
+	for i := 0; i < num; {
+		if string(RandomInt(65, 90)) != temp {
+			temp = string(RandomInt(65, 90))
+			result.WriteString(temp)
+			i++
+		}
+	}
+	return result.String()
+}
+//生成随机数字
+func RandomInt(min int, max int) int {
+	math_rand.Seed(time.Now().UTC().UnixNano())
+	return min + math_rand.Intn(max-min)
 }

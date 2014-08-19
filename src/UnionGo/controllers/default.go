@@ -11,13 +11,14 @@ type MainController struct {
 }
 
 func (this *MainController) Index() {
-	s:=NewGuid()
+	s:=this.isPost()
 	Log(s)
 	this.TplNames = "index.html"
 	this.Render()
 }
 
 func (this *MainController) Save() {
+
 	data := `{"list":` + this.GetString("data") + `}`
 	h := new(Portal_user)
 

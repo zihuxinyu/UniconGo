@@ -97,3 +97,33 @@ func GetDir(path string) error {
 		return nil
 	}
 }
+//文件大小
+func FileSize(size int) string {
+	s := float32(size)
+	if s > 1024*1024 {
+		return fmt.Sprintf("%.1f M", s/(1024*1024))
+	}
+	if s > 1024 {
+		return fmt.Sprintf("%.1f K", s/1024)
+	}
+	return fmt.Sprintf("%f B", s)
+}
+//是否文件
+func IsFile(path string) bool {
+	f, e := os.Stat(path)
+	if e != nil {
+		return false
+	}
+	if f.IsDir() {
+		return false
+	}
+	return true
+}
+//是否目录
+func IsDir(path string) bool {
+	f, e := os.Stat(path)
+	if e != nil {
+		return false
+	}
+	return f.IsDir()
+}
