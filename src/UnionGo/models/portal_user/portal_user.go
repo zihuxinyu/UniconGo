@@ -19,10 +19,7 @@ func init() {
 }
 
 func (h Portal_user) SaveList(data string) {
-
 	SaveMiniuiData(h,data)
-
-
 }
 
 
