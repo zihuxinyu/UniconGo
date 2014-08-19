@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/Library"
 	. "UnionGo/models/portal_user"
+	"fmt"
 )
 
 type MainController struct {
@@ -13,6 +14,16 @@ type MainController struct {
 func (this *MainController) Index() {
 	s:=this.isPost()
 	Log(s)
+
+	var ss  Portal_user
+	ss.User_name="sss"
+	portal_users:=[]Portal_user{
+		{Guid:1,User_name:"dddddd"},
+		{User_name:"dddddd"},
+	}
+
+	fmt.Println(portal_users,ss)
+
 	this.TplNames = "index.html"
 	this.Render()
 }
@@ -23,6 +34,7 @@ func (this *MainController) Save() {
 	h := new(Portal_user)
 
 	h.SaveList(data)
+
 	this.Data["json"] = "ok"
 	this.ServeJson()
 }

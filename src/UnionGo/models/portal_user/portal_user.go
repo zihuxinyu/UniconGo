@@ -11,7 +11,7 @@ type Portal_user struct{
 	User_code              string `orm:"pk" form:"User_code"`
 	User_name              string `form:"User_name"`
 	Dpt_name               string
-	Msgexpdate             time.Time
+	Msgexpdate             time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
 func init() {
