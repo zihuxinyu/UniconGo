@@ -4,10 +4,9 @@ import (
 	"github.com/astaxie/beego/orm"
 	"time"
 	. "UnionGo/Library"
-	"fmt"
-
 	"reflect"
 	"encoding/json"
+	"fmt"
 	"strings"
 )
 
@@ -22,6 +21,8 @@ type Portal_user struct{
 func init() {
 	orm.RegisterModel(new(Portal_user))
 }
+
+
 
 func (h Portal_user) SaveList(data string) {
 	//整理为可识别格式
@@ -60,14 +61,12 @@ func (h Portal_user) SaveList(data string) {
 
 			var pu Portal_user
 			json.Unmarshal(x, &pu)
-			col := make([]string, 10)
-			col[0]="User_name"
-			col[1]="User_code"
-			pu.Update(col)
+
+
 
 			switch state.(string){
 			case "modified":
-				//orm.NewOrm().QueryTable(StructType.Name()).Filter("Guid", SingleItem["Guid"]).Update(m)
+				orm.NewOrm().QueryTable(StructType.Name()).Filter("Guid", SingleItem["Guid"]).Update(m)
 			case "added":
 				pu.Insert()
 			case "removed":
