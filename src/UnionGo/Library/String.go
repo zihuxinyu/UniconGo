@@ -3,6 +3,7 @@ package Library
 import (
 	"regexp"
 	"strings"
+	"strconv"
 )
 var (
 	lowerRe, _ = regexp.Compile("\\<[\\S\\s]+?\\>")
@@ -23,14 +24,30 @@ func RemoveFormatting(html string) string {
 	return StripTags(html)
 }
 
-func StringInSlice(str string, list []string) bool {
-	for _, element := range list {
-		if element == str {
-			return true
+
+
+//列表是否包含给定项
+func ListContains(list []interface{}, key interface{}) (finded bool) {
+	for _, v := range list {
+		if v == key {
+			finded = true
+			break
 		}
 	}
-	return false
+	return
 }
+//字符串数组中是否包含给定项
+func StringsContains(list []string, key string) (finded bool) {
+	for _, v := range list {
+		if v == key {
+			finded = true
+			break
+		}
+	}
+	return
+}
+
+
 func StringEqual(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
@@ -41,4 +58,17 @@ func StringEqual(a, b []string) bool {
 		}
 	}
 	return true
+}
+
+//字符串转长整型
+func Str2int64(s string) (int64, error) {
+	return strconv.ParseInt(s, 10, 64)
+}
+//字符串转整形
+func Str2int(s string) (int, error) {
+	return strconv.Atoi(s)
+}
+//整形转字符串
+func Int2str(i int) string {
+	return strconv.Itoa(i)
 }

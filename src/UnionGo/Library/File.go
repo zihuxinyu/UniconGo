@@ -4,6 +4,7 @@ import (
 	"strings"
 	"path/filepath"
 	"os"
+	"os/exec"
 )
 // 分离文件名与扩展名(包含.)
 func SplitFilename(filename string) (baseName, ext string) {
@@ -56,4 +57,43 @@ func ListDir(dir string) []string {
 	}
 	names, _ := f.Readdirnames(0)
 	return names
+}
+
+
+
+//当前应用的绝对路径
+func GetAppRoot() string {
+	file, err := exec.LookPath(os.Args[0])
+	if err != nil {
+		return ""
+	}
+	p, err := filepath.Abs(file)
+	if err != nil {
+		return ""
+	}
+	return filepath.Dir(p)
+}
+
+//文件夹是否存在
+func DirExists(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return os.IsExist(err)
+	} else {
+		return fi.IsDir()
+	}
+}
+
+//检查文件夹是否存在，如果不存在，则创建一个新文件夹
+func GetDir(path string) error {
+	//文件夹是否存在
+	if DirExists(path) {
+		return nil
+	} else {
+		//创建文件夹
+		if err := os.Mkdir(path, os.ModeDir); err != nil {
+			return err
+		}
+		return nil
+	}
 }
