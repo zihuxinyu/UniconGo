@@ -83,11 +83,12 @@ func SaveMiniuiData(h interface{}, data string) {
 	//按struct 遍历得到定义，及得到的值
 	//	var h Portal_user
 	StructType := reflect.TypeOf(h)
-	fmt.Println("显示",StructType.Name())
+	fmt.Println("显示",StructType.Name(),StructType.Elem())
 
 
-	v := reflect.New(StructType.Elem())
-	newA = v.Interface().(*h)
+//	v := reflect.New(StructType.Elem())
+//	newA:= v.Interface().( StructType.Type())
+//	fmt.Println(newA)
 
 	for _, SingleItem := range s.List {
 		if state := SingleItem["_state"]; state != nil {

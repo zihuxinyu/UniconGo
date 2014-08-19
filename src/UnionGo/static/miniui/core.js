@@ -38,49 +38,138 @@ function AddCSSLink(id, url, doc) {
     else
         doc.documentElement.appendChild(link);
 }
-function alert(str) {
-    mini.showTips({
-        content: "<b>" + str + "</b> ",
-        state: "warning",
+
+
+/**
+ * 操作成功的提示
+ * @param str
+ */
+function success(str) {
+    mini.showMessageBox({
+        showModal: true,
+        width: 250,
+        title: "提示",
+        iconCls: "mini-messagebox-info",
+        message: str,
+        timeout: 1500,
         x: "center",
-        y: "top",
-        timeout: 1000
+        y: "middle"
     });
 }
 
+/*****************提示方法******************/
+/**
+ * alert的提示
+ * @param str
+ */
+function alert(str) {
+    mini.showMessageBox({
+        showModal: true,
+        width: 250,
+        title: "提示",
+        iconCls: "mini-messagebox-warning",
+        message: str,
+        timeout: 1500,
+        x: "center",
+        y: "middle"
+    });
+}
+/**
+ * 出现错误的提示
+ * @param str
+ */
+function error(str) {
+
+    mini.showMessageBox({
+        showModal: true,
+        width: 250,
+        title: "提示",
+        iconCls: "mini-messagebox-error",
+        message: str,
+        timeout: 1500,
+        x: "center",
+        y: "middle"
+    });
+
+}
+/*****************提示方法******************/
+/*****************页面方法******************/
+
+/**
+ * 页面弹出调用窗口回执方法
+ * @param action
+ * @returns {*}
+ * @constructor
+ */
+function CloseWindow(action) {
+    if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+    else window.close();
+}
+
+function onOk() {
+    CloseWindow("ok");
+}
+function onCancel() {
+    CloseWindow("cancel");
+}
+/*****************页面方法******************/
 /****************renderers*******************/
 function onDateRenderer(e) {
     var date = mini.parseDate(e.value)
     var ss = mini.formatDate(date, "yyyy-MM-dd HH:mm:ss")
-    return  ss;
-
+    return ss;
 }
 /****************renderers*******************/
 
 /***********grid op start***********/
 
+function addRow(htmlguidid) {
+    var grid = mini.get(htmlguidid);
+    grid.addRow({}, 0);
+    grid.beginEditCell({}, 0);
+}
+function removeRow(htmlguidid) {
+    var grid = mini.get(htmlguidid);
+    var rows = grid.getSelecteds();
+    if (rows.length > 0) {
+        grid.removeRows(rows, true);
+    }
+}
+
+
+/**
+ * 保存Grid数据
+ * @param grid:要操作的grid
+ * @param posturl:接收数据的url
+ * @returns {boolean}
+ */
 function saveGrid(gridid, posturl) {
     var grid = mini.get(gridid);
     var data = grid.getChanges(null, true);
-    //时间字段拿出来单独转换为beego需要的格式
-
     for (i = 0; i < data.length; i++) {
         if (data[i].Msgexpdate!=undefined) {
             data[i].Msgexpdate = mini.formatDate(data[i].Msgexpdate, "yyyy-MM-ddTHH:mm:ss+08:00");
         }
     }
     var json = mini.encode(data);
-    alert(json);
-    grid.loading("保存中，请稍后......");
+    
+    if (data == "") {
+        error('没有数据需要保存');
+        return false;
+    }
+    var msgid = mini.loading("数据保存中，请稍后......", "保存数据");
     $.ajax({
         url: posturl,
         data: { data: json },
         type: "post",
         success: function (text) {
+            mini.hideMessageBox(msgid);
+            success(text);
             grid.reload();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.responseText);
+            mini.hideMessageBox(msgid);
+            error(jqXHR.responseText);
         }
     });
 }
