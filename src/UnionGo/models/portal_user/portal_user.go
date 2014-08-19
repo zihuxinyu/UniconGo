@@ -5,7 +5,10 @@ import (
 	"time"
 	. "UnionGo/Library"
 	"fmt"
+
+	"reflect"
 	"encoding/json"
+	"strings"
 )
 
 type Portal_user struct{
@@ -25,42 +28,52 @@ func (h Portal_user) SaveList(data string) {
 	var s Data
 	json.Unmarshal([]byte(data), &s)
 
+	StructType := reflect.TypeOf(h)
+
 
 	//按struct 遍历得到定义，及得到的值
 	for _, SingleItem := range s.List {
 		if state := SingleItem["_state"]; state != nil {
-			if state.(string) == "modified" {
+			m := make(orm.Params)
+			for i := 0; i < StructType.NumField(); i++ {
+				f := StructType.Field(i)
+				//fmt.Println(f.Name, f.Type, reflect.TypeOf( v[f.Name]))
+				if SingleItem[f.Name] != nil {
+					if f.Type == reflect.TypeOf(time.Now()) {
+						//对时间格式进行特殊的处理，进行时区转换，miniui过来的json默认为+08:00
+						//处理为go转换string为时间需要的标准时间格式
+						ss := fmt.Sprintf("%s", SingleItem[f.Name])
+						ss = strings.Replace(ss, "T", " ", -1)
+						ss = strings.Replace(ss, "+08:00", " +08:00", -1)
+						t, _ := time.Parse("2006-01-02 15:04:05 -07:00 ", ss)
+
+						m[f.Name] = t
+						//转换正确的时间回填
+						SingleItem[f.Name] = t
+						fmt.Println(t)
+					}else {
+						m[f.Name] = SingleItem[f.Name]
+					}
+				}
+			}
+			x, _ := json.Marshal(SingleItem)
+
+			var pu Portal_user
+			json.Unmarshal(x, &pu)
+			col := make([]string, 10)
+			col[0]="User_name"
+			col[1]="User_code"
+			pu.Update(col)
+
+			switch state.(string){
+			case "modified":
+				//orm.NewOrm().QueryTable(StructType.Name()).Filter("Guid", SingleItem["Guid"]).Update(m)
+			case "added":
+				pu.Insert()
+			case "removed":
+				pu.Delete()
 			}
 		}
-		x,_:=json.Marshal(SingleItem)
-
-		var pu Portal_user
-		json.Unmarshal(x, &pu)
-//		StructType := reflect.TypeOf(h)
-
-//		for i := 0; i < StructType.NumField(); i++ {
-//			f := StructType.Field(i)
-//			if SingleItem[f.Name] != nil {
-//				if f.Type == reflect.TypeOf(time.Now()) {
-//					//对时间格式进行特殊的处理，进行时区转换，miniui过来的json默认为+08:00
-//					//处理为go转换string为时间需要的标准时间格式
-//					ss := fmt.Sprintf("%s", SingleItem[f.Name])
-//					ss = strings.Replace(ss, "T", " ", -1)
-//					ss = strings.Replace(ss, "+08:00", " +08:00", -1)
-//					t, _ := time.Parse("2006-01-02 15:04:05 -07:00 ", ss)
-//					//				fmt.Println("时间字段", t)
-//					SingleItem[f.Name] = t
-//				}
-//			}
-//			fmt.Println(f.Name, SingleItem[f.Name])
-//
-//
-//
-//		}
-
-		pu.Insert()
-		fmt.Println(SingleItem,string(x),pu)
-
 	}
 	//SaveMiniuiData(h,data)
 }
