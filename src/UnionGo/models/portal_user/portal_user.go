@@ -6,8 +6,7 @@ import (
 	. "UnionGo/Library"
 	"reflect"
 	"encoding/json"
-	"fmt"
-	"strings"
+
 )
 
 type Portal_user struct{
@@ -22,61 +21,28 @@ func init() {
 	orm.RegisterModel(new(Portal_user))
 }
 
-
-func do(StructType reflect.Type,SingleItem map[string]interface {},m orm.Params)  {
-	
-	for i := 0; i < StructType.NumField(); i++ {
-		f := StructType.Field(i)
-		//fmt.Println(f.Name, f.Type, reflect.TypeOf( v[f.Name]))
-		if SingleItem[f.Name] != nil {
-			if f.Type == reflect.TypeOf(time.Now()) {
-				//对时间格式进行特殊的处理，进行时区转换，miniui过来的json默认为+08:00
-				//处理为go转换string为时间需要的标准时间格式
-				ss := fmt.Sprintf("%s", SingleItem[f.Name])
-				ss = strings.Replace(ss, "T", " ", -1)
-				ss = strings.Replace(ss, "+08:00", " +08:00", -1)
-				t, _ := time.Parse("2006-01-02 15:04:05 -07:00 ", ss)
-
-				m[f.Name] = t
-				//转换正确的时间回填
-				SingleItem[f.Name] = t
-				fmt.Println(t)
-			}else {
-				m[f.Name] = SingleItem[f.Name]
-			}
-		}
-	}
-
-}
-
 func (h Portal_user) SaveList(data string) {
 	//整理为可识别格式
 	var s Data
 	json.Unmarshal([]byte(data), &s)
-
+	pk:=GetModelPk(h)
 	StructType := reflect.TypeOf(h)
 
 
 	//按struct 遍历得到定义，及得到的值
 	for _, SingleItem := range s.List {
 		if state := SingleItem["_state"]; state != nil {
-			m:=make(orm.Params)
-			do(StructType,SingleItem,m)
-
-			x, _ := json.Marshal(SingleItem)
+			//更新时间格式，并将赋值的字段填充到返回值(orm.Params)中
+			m :=MiniUIDataUpdate(StructType, SingleItem)
 
 			var pu Portal_user
-			json.Unmarshal(x, &pu)
+			x, _ := json.Marshal(SingleItem)
+			json.Unmarshal(x, &h)
 
-			s := reflect.TypeOf(&pu).Elem() //通过反射获取type定义®
-			for i := 0; i < s.NumField(); i++ {
-				fmt.Println(s.Field(i).Tag) //将tag输出出来
-
-			}
 
 			switch state.(string){
 			case "modified":
-				orm.NewOrm().QueryTable(StructType.Name()).Filter("Guid", SingleItem["Guid"]).Update(m)
+				orm.NewOrm().QueryTable(StructType.Name()).Filter(pk, SingleItem[pk]).Update(m)
 			case "added":
 				pu.Insert()
 			case "removed":
@@ -93,6 +59,12 @@ func (m *Portal_user) Insert() error {
 	return nil
 }
 func (m *Portal_user) Delete() error {
+
+	intType := reflect.TypeOf(m).Elem()
+	intPtr2 := reflect.New(intType)
+	// Just to prove it
+	b := intPtr.Elem().Interface().(int)
+
 	if _, err := orm.NewOrm().Delete(m); err != nil {
 		return err
 	}
