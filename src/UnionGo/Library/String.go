@@ -139,3 +139,23 @@ func Str2int(s string) (int, error) {
 func Int2str(i int) string {
 	return strconv.Itoa(i)
 }
+
+
+
+// convert like this: "HelloWorld" to "hello_world"
+func SnakeCasedName(name string) string {
+	newstr := make([]rune, 0)
+	firstTime := true
+	for _, chr := range name {
+		if isUpper := 'A' <= chr && chr <= 'Z'; isUpper {
+			if firstTime == true {
+				firstTime = false
+			} else {
+				newstr = append(newstr, '_')
+			}
+			chr -= ('A' - 'a')
+		}
+		newstr = append(newstr, chr)
+	}
+	return string(newstr)
+}

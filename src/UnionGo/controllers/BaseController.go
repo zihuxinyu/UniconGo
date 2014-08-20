@@ -12,6 +12,7 @@ type BaseController struct {
 	beego.Controller
 }
 
+ 
 func (c *BaseController) GetUserId() string {
 	if userID := c.GetSession("UserID"); userID != nil {
 		return userID.(string)
