@@ -38,6 +38,7 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 		f := StructType.Field(i)
 		//fmt.Println(f.Name, f.Type, reflect.TypeOf( v[f.Name]))
 		if SingleItem[f.Name] != nil {
+
 			if f.Type == reflect.TypeOf(time.Now()) {
 				//对时间格式进行特殊的处理，进行时区转换，miniui过来的json默认为+08:00
 				//处理为go转换string为时间需要的标准时间格式
@@ -50,8 +51,10 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 				//转换正确的时间回填
 				SingleItem[f.Name] = t
 			}else {
+
 				m[f.Name] = SingleItem[f.Name]
 			}
+
 		}
 	}
 
