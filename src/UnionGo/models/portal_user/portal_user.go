@@ -6,10 +6,7 @@ import (
 	. "UnionGo/Library"
 	"reflect"
 	"encoding/json"
-	"fmt"
-	"strconv"
 	. "github.com/mitchellh/mapstructure"
-	"strings"
 )
 
 type Portal_user struct{
@@ -25,16 +22,11 @@ func init() {
 
 }
 
-
-
-
 var kinds = map[string]func() interface{}{
 	"p":func() interface{} {return &Portal_user{}},
 }
 
-
-func (h Portal_user) SaveList(data string) {
-
+func Saveit(data string) {
 	reflectx := kinds["p"]()
 
 
@@ -55,7 +47,7 @@ func (h Portal_user) SaveList(data string) {
 			//格式化miniui过来的时间
 			MiniUIDataUpdate(reflectx, SingleItem, m)
 
-			Decode(SingleItem,reflectx)
+			Decode(SingleItem, reflectx)
 
 			switch state{
 			case "modified":
@@ -68,4 +60,8 @@ func (h Portal_user) SaveList(data string) {
 			}
 		}
 	}
+}
+
+func (h Portal_user) SaveList(data string) {
+	Saveit(data)
 }
