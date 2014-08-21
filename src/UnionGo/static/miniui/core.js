@@ -146,11 +146,11 @@ function removeRow(htmlguidid) {
 function saveGrid(gridid, posturl) {
     var grid = mini.get(gridid);
     var data = grid.getChanges(null, true);
-    for (i = 0; i < data.length; i++) {
-        if (data[i].Msgexpdate!=undefined) {
-            data[i].Msgexpdate = mini.formatDate(data[i].Msgexpdate, "yyyy-MM-ddTHH:mm:ss +08:00");
-        }
-    }
+//    for (i = 0; i < data.length; i++) {
+//        if (data[i].Msgexpdate!=undefined) {
+//            data[i].Msgexpdate = mini.formatDate(data[i].Msgexpdate, "yyyy-MM-ddTHH:mm:ss +08:00");
+//        }
+//    }
     var json = mini.encode(data);
     
     if (data == "") {

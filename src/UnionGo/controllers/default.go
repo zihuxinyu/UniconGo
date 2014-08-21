@@ -4,25 +4,17 @@ import (
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/Library"
 	. "UnionGo/models/portal_user"
-	"fmt"
+	"github.com/astaxie/beego"
 )
 
 type MainController struct {
-	BaseController
+	beego.Controller
+
 }
 
 func (this *MainController) Index() {
-	s:=this.isPost()
-	Log(s)
 
-	var ss  Portal_user
-	ss.User_name="sss"
-	portal_users:=[]Portal_user{
-		{Guid:1,User_name:"dddddd"},
-		{User_name:"dddddd"},
-	}
 
-	fmt.Println(portal_users,ss)
 
 	this.TplNames = "index.html"
 	this.Render()
@@ -53,3 +45,10 @@ func (this *MainController) Get() {
 	this.ServeJson()
 
 }
+//func (this *MainController) Post() {
+//	u := Portal_user{}
+//	if err := this.ParseForm(&u); err != nil {
+//		//handle error
+//	}
+//
+//}

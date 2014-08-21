@@ -11,7 +11,7 @@ import (
 
 //找出beegoModel的主键
 func GetModelPk(obj interface{}) (pkFiledName string) {
-	s := reflect.TypeOf(obj) //通过反射获取type定义
+	s := reflect.TypeOf(obj).Elem() //通过反射获取type定义
 	for i := 0; i < s.NumField(); i++ {
 		pkFiled := s.Field(i)
 		tags := strings.Split(pkFiled.Tag.Get("orm"), ",")
@@ -31,9 +31,8 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 
 
 //将miniui得到的数据进行格式化，主要是对时间进行统一，更新到单一条目
-func MiniUIDataUpdate(StructType reflect.Type, SingleItem map[string]interface{},m orm.Params) {
-
-
+ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{},m orm.Params) {
+	StructType := reflect.TypeOf(obj).Elem() //通过反射获取type定义
 
 	for i := 0; i < StructType.NumField(); i++ {
 		f := StructType.Field(i)
