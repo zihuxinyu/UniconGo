@@ -31,7 +31,20 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 
 
 //将miniui得到的数据进行格式化，主要是对时间进行统一，更新到单一条目
-func MiniUIDataUpdate(StructType reflect.Type, SingleItem map[string]interface{}) (m orm.Params){
+func MiniUIDataUpdate(StructType reflect.Type, SingleItem map[string]interface{},m orm.Params) {
+
+
+	x,_:=ModelCache.Get("p")
+	fmt.Println("saveminiuidata",x,reflect.TypeOf(x))
+	bb:=reflect.New(x).Elem()
+
+
+	fmt.Println("bb",bb.Kind())
+	mutable := reflect.ValueOf(&bb).Elem()
+	f:=mutable.FieldByName("User_name")
+	fmt.Println("f",mutable.Kind(),f.IsValid(),f.CanSet(),f.Kind())
+	f.SetString("dddd")
+	fmt.Println("fanshede",bb)
 
 	for i := 0; i < StructType.NumField(); i++ {
 		f := StructType.Field(i)
@@ -53,6 +66,5 @@ func MiniUIDataUpdate(StructType reflect.Type, SingleItem map[string]interface{}
 			}
 		}
 	}
-	return m
 
 }

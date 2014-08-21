@@ -21,6 +21,9 @@ type Data struct {
 }
 
 func save2DB(StructType reflect.Type, SingleItem map[string]interface{}) {
+
+
+
 	o := orm.NewOrm()
 
 	m := make(orm.Params)
