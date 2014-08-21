@@ -24,6 +24,8 @@ func init() {
 	ModelCache.Set("p", reflect.TypeOf(bb))
 }
 
+
+
 func Test(h interface {}){
 	mutable := reflect.ValueOf(&h).Elem()
 	f := mutable.FieldByName("User_name")
@@ -31,55 +33,33 @@ func Test(h interface {}){
 		f.SetString("第er次"+strconv.Itoa(i))
 		fmt.Println(h)
 	}
+
+	kinds := map[string]func() interface {} {
+
+		"p": func() interface {} { return &Portal_user{} },
+	}
+	fmt.Println(kinds["p"]())
+
 }
+var kinds=map[string]func() interface {}{
+	"p":func() interface {}{return &Portal_user{}},
+}
+
 
 func (h Portal_user) SaveList(data string) {
 
+
+
+	fmt.Println("dddddsfadsfdsafdsf", kinds["p"]())
+
+
 	cc, _ := ModelCache.Get("p")
-	intPtr := reflect.New(reflect.TypeOf(cc))
+	intPtr := reflect.New(cc).Elem()
+	reflectx:=intPtr.Interface()
+	reflectk:=kinds["p"]()
+	fmt.Println(reflect.TypeOf(reflectk))
 
-	intV := reflect.ValueOf(&intPtr).Elem()
-	fv := intV.FieldByName("User_name")
-	fv.SetString("好了吗")
-
-	mutable := reflect.ValueOf(&h).Elem()
-	f := mutable.FieldByName("User_name")
-	for  i:=0;i<10;i++{
-		f.SetString("第一次"+strconv.Itoa(i))
-		fmt.Println(h)
-	}
-	Test(h)
-
-
-//
-//
-//	intPtr := reflect.New(reflect.TypeOf(bb))
-//	var sss intPtr
-//	sss.User_name="dddd"
-//	intV:=reflect.ValueOf(&intPtr).Elem()
-//	fv:=intV.FieldByName("User_name")
-//	fv.SetString("好了吗")
-//
-//
-//
-//	cc, _ := ModelCache.Get("p")
-//
-//
-//	xyz := reflect.New(cc).Elem()
-//	fmt.Println("real", reflect.TypeOf(bb) )
-//	fmt.Println("ModelCache", intPtr.Elem().Interface())
-//
-//	fmt.Println("xyz反射后得到", xyz)
-//	mutable2 := reflect.ValueOf(&xyz).Elem()
-//	f2 := mutable2.FieldByName("User_name")
-//
-//	fmt.Println(cc, "第二次", mutable2.Kind(), f2.IsValid(), f2.CanSet(), f2.Kind())
-//	f2.SetString("dddd")
-//
-//	fmt.Println("第二次", cc)
-//
-//
-//	fmt.Println(ModelCache.Get("p"))
+	fmt.Println(reflect.TypeOf(reflectx))
 
 	//整理为可识别格式
 	var s Data
@@ -88,6 +68,8 @@ func (h Portal_user) SaveList(data string) {
 	StructType := reflect.TypeOf(h)
 
 
+	//var pu Portal_user
+
 	//按struct 遍历得到定义，及得到的值
 	for _, SingleItem := range s.List {
 		if state := SingleItem["_state"]; state != nil {
@@ -95,18 +77,19 @@ func (h Portal_user) SaveList(data string) {
 			m := make(orm.Params)
 			MiniUIDataUpdate(StructType, SingleItem, m)
 
-			var pu Portal_user
-			x, _ := json.Marshal(SingleItem)
-			json.Unmarshal(x, &h)
 
+			x, _ := json.Marshal(SingleItem)
+			json.Unmarshal(x, &reflectx)
+
+			fmt.Println("reflectx",reflectx)
 
 			switch state.(string){
 			case "modified":
 				orm.NewOrm().QueryTable(StructType.Name()).Filter(pk, SingleItem[pk]).Update(m)
 			case "added":
-				pu.Insert()
+				//pu.Insert()
 			case "removed":
-				pu.Delete()
+				//pu.Delete()
 			}
 		}
 	}

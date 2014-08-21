@@ -1,2 +1,2 @@
 launchctl setenv GOROOT /usr/local/go
-launchctl setenv GOPATH /Users/yourname/go
+launchctl setenv GOPATH /Users/Weibaohui/go
