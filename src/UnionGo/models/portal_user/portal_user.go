@@ -42,29 +42,21 @@ func Test(h interface {}){
 
 }
 var kinds=map[string]func() interface {}{
-	"p":func() interface {}{return &Portal_user{}},
+	"p":func() interface {}{return Portal_user{}},
 }
 
 
 func (h Portal_user) SaveList(data string) {
 
+	reflectx:=kinds["p"]()
 
 
-	fmt.Println("dddddsfadsfdsafdsf", kinds["p"]())
-
-
-	cc, _ := ModelCache.Get("p")
-	intPtr := reflect.New(cc).Elem()
-	reflectx:=intPtr.Interface()
-	reflectk:=kinds["p"]()
-	fmt.Println(reflect.TypeOf(reflectk))
-
-	fmt.Println(reflect.TypeOf(reflectx))
+	fmt.Println(reflect.TypeOf(reflectx),reflect.TypeOf(h))
 
 	//整理为可识别格式
 	var s Data
 	json.Unmarshal([]byte(data), &s)
-	pk := GetModelPk(h)
+
 	StructType := reflect.TypeOf(h)
 
 
@@ -80,11 +72,11 @@ func (h Portal_user) SaveList(data string) {
 
 			x, _ := json.Marshal(SingleItem)
 			json.Unmarshal(x, &reflectx)
-
-			fmt.Println("reflectx",reflectx)
-
+			fmt.Println("reflectx",reflectx,reflect.TypeOf(reflectx))
 			switch state.(string){
 			case "modified":
+				pk := GetModelPk(reflectx)
+				fmt.Println(pk)
 				orm.NewOrm().QueryTable(StructType.Name()).Filter(pk, SingleItem[pk]).Update(m)
 			case "added":
 				//pu.Insert()
