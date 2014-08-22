@@ -36,6 +36,10 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 	}
 	StructType := reflect.TypeOf(obj).Elem() //通过反射获取type定义
 
+	diy:=map[string]string{
+		//"User_name":"都是我",
+	}
+
 	for i := 0; i < StructType.NumField(); i++ {
 		f := StructType.Field(i)
 		//fmt.Println(f.Name, f.Type, reflect.TypeOf( v[f.Name]))
@@ -66,6 +70,16 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 			//fmt.Println("格式整理后",f.Name,reflect.TypeOf( SingleItem[f.Name]))
 
 		}
+
+		for x:=range diy{
+			//fmt.Println(x,diy[x],f.Name,reflect.TypeOf(SingleItem[f.Name]))
+			if x==f.Name{
+				m[f.Name]=diy[x]
+				SingleItem[f.Name]=diy[x]
+			}
+		}
+
+
 	}
 
 	//先将map 对应为json

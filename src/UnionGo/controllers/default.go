@@ -31,6 +31,12 @@ func (this *MainController) Save() {
 	this.ServeJson()
 }
 
+
+func (this *MainController) Test() {
+	this.Data["json"] = "ok"
+	this.ServeJson()
+}
+
 func (this *MainController) Get() {
 
 	var pulist []Portal_user
