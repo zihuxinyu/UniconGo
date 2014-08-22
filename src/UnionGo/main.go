@@ -13,7 +13,6 @@ var Cfg = beego.AppConfig
 
 func init() {
 
-	beego.Debug("dddddddd")
 
 	dbUser := Cfg.String("db_user")
 	dbPass := Cfg.String("db_pass")
@@ -31,6 +30,7 @@ func init() {
 }
 
 func main() {
+	fmt.Println("%#v",orm.NewOrm())
 	orm.Debug = true
 	beego.SessionOn=true
 	beego.AutoRouter(&controllers.MainController{})
