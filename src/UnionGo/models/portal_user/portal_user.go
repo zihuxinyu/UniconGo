@@ -16,7 +16,7 @@ type Portal_user struct{
 
 func init() {
 	orm.RegisterModel(new(Portal_user))
-	
+
 	ModelCache.Set("Portal_user", func() interface{} {return &Portal_user{}})
 
 }

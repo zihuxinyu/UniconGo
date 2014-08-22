@@ -24,6 +24,7 @@ _testmain.go
 *.exe
 *.test
 *.prof
+.DS_Store
 
 .idea
 conf/app.conf

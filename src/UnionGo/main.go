@@ -13,6 +13,8 @@ var Cfg = beego.AppConfig
 
 func init() {
 
+	beego.Debug("dddddddd")
+
 	dbUser := Cfg.String("db_user")
 	dbPass := Cfg.String("db_pass")
 	dbHost := Cfg.String("db_host")
