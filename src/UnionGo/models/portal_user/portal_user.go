@@ -16,12 +16,11 @@ type Portal_user struct{
 
 func init() {
 	orm.RegisterModel(new(Portal_user))
-
 	
-	ModelCache.Set("p", func() interface{} {return &Portal_user{}})
+	ModelCache.Set("Portal_user", func() interface{} {return &Portal_user{}})
 
 }
 
 func (h Portal_user) SaveList(data string) {
-	SaveMiniUIData("p", data)
+	SaveMiniUIData("Portal_user", data)
 }

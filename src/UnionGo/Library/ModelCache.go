@@ -24,6 +24,5 @@ func (mc *_modelCache) Get(table string) (md func() interface{}, ok bool) {
 func (mc *_modelCache) Set(table string, md func() interface{}) func() interface{} {
 	mii := mc.cache[table]
 	mc.cache[table] = md
-
 	return mii
 }
