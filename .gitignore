@@ -25,6 +25,6 @@ _testmain.go
 *.test
 *.prof
 
-src/UnionGo/.idea
-src/UnionGo/conf/app.conf
-src/UnionGo/go
+UnionGo/.idea
+UnionGo/conf/app.conf
+UnionGo/go
