@@ -5,6 +5,7 @@ import (
 	. "UnionGo/Library"
 	. "UnionGo/models/portal_user"
 	"github.com/astaxie/beego"
+	"fmt"
 )
 
 type MainController struct {
@@ -32,9 +33,15 @@ func (this *MainController) Save() {
 }
 
 
-func (this *MainController) Test() {
-	this.Data["json"] = "ok"
+func (this *MainController) Zhangsan() {
+
+	this.SetSession("dd",RandomPwd(10))
+	dd:=this.GetSession("dd")
+	fmt.Println("session",dd)
+	fmt.Println("session")
+	this.Data["json"] =dd
 	this.ServeJson()
+
 }
 
 func (this *MainController) Get() {
@@ -42,7 +49,6 @@ func (this *MainController) Get() {
 	var pulist []Portal_user
 	o := orm.NewOrm()
 	pu := new(Portal_user)
-
 	qs := o.QueryTable(pu)
 	qs = qs.Limit(2, 10)
 	qs.All(&pulist)
