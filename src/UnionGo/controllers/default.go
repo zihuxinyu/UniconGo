@@ -33,7 +33,7 @@ func (this *MainController) Save() {
 }
 
 
-func (this *MainController) Zhangsan() {
+func (this *MainController) Test() {
 
 	this.SetSession("dd",RandomPwd(10))
 	dd:=this.GetSession("dd")
