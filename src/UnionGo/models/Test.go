@@ -21,9 +21,7 @@ type TagPost struct {
 	Authkey    string `orm:"size(10)"`
 }
 
-func (m *TagPost) TableName() string {
-	return TableName("tag_post")
-}
+
 func (m *TagPost) Insert() error {
 	if _, err := orm.NewOrm().Insert(m); err != nil {
 		return err

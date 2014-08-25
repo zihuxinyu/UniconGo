@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-
 type MiniuiGrid struct {
 	Total int64 `json:"total"`
 	Data  interface{} `json:"data"`
@@ -20,9 +19,8 @@ type MiniuiGrid struct {
 //	[{"_state":"modified","Guid":22,"Msgexpdate":"2014-08-15T15:56:18"},{"_state":"modified","Guid":23,"Msgexpdate":"2014-08-15T15:56:10"}]
 
 type DataList struct {
-	List [] map[string]interface {}
+	List [] map[string]interface{}
 }
-
 
 //找出beegoModel的主键
 func GetModelPk(obj interface{}) (pkFiledName string) {
@@ -30,12 +28,22 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 	for i := 0; i < s.NumField(); i++ {
 		pkFiled := s.Field(i)
 		tags := strings.Split(pkFiled.Tag.Get("orm"), ",")
+		fmt.Println(tags)
 		for _, v := range tags {
-			if strings.ToLower(v) == "pk" {
-				pkFiledName = pkFiled.Name
-				break
-			}
+			if strings.ContainsAny(v, ";") {
+				for _, vv := range strings.Split(v, ";") {
 
+					if strings.ToLower(vv) == "pk" {
+						pkFiledName = pkFiled.Name
+						break
+					}
+				}
+			}else {
+				if strings.ToLower(v) == "pk" {
+					pkFiledName = pkFiled.Name
+					break
+				}
+			}
 		}
 		//得到值就退出循环
 		if len(pkFiledName) > 0 {
@@ -53,7 +61,11 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 	StructType := reflect.TypeOf(obj).Elem() //通过反射获取type定义
 
 	diy := map[string]string{
-	//"User_name":"都是我",
+		//"User_name":"都是我",
+		"Creatorid":"weibh",
+		"Createdate":TimeNowString(),
+		"Modifierid":"weibh",
+		"Modifydate":TimeNowString(),
 	}
 
 	for i := 0; i < StructType.NumField(); i++ {
@@ -68,7 +80,7 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 				//处理为go转换string为时间需要的标准时间格式
 				ss := fmt.Sprintf("%s", SingleItem[f.Name])
 				ss = strings.Replace(ss, "T", " ", -1)
-				ss = ss + " +08:00"
+				ss = ss+" +08:00"
 				//fmt.Println("时间格式整理"+ss)
 				//ss = strings.Replace(ss, "+08:00", " +08:00", -1)
 

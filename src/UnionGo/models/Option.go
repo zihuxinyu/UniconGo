@@ -4,13 +4,32 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego"
 	"fmt"
+	. "UnionGo/Library"
+	"time"
 )
+
 //配置项表
 type Option struct {
-	Id int64
-	Name string
-	Value string
+	Id         int  `orm:"pk;auto" `
+	Name       string
+	Value      string
+	Creatorid  string
+	Createdate time.Time
+	Modifierid string
+	Modifydate time.Time
 }
+
+func init() {
+	orm.RegisterModel(new(Option))
+
+	ModelCache.Set("Option", func() interface{} {return &Option{}})
+
+}
+
+func (h Option) SaveList(data string) {
+	SaveMiniUIData("Option", data)
+}
+
 func (m *Option) TableName() string {
 	return TableName("option")
 }
@@ -44,6 +63,7 @@ func (m *Option) Delete() error {
 func (m *Option) Query() orm.QuerySeter {
 	return orm.NewOrm().QueryTable(m)
 }
+
 //返回带前缀的表名
 func TableName(str string) string {
 	return fmt.Sprintf("%s%s", beego.AppConfig.String("dbprefix"), str)

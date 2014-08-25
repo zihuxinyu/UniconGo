@@ -9,3 +9,9 @@ func TimeParseOften(value string) (time.Time, error) {
 	local, _ := time.LoadLocation("Local")
 	return time.ParseInLocation(TIME_LAYOUT_OFTEN, value, local)
 }
+
+//返回当前时区的当前时间
+func TimeNowString() (timea string) {
+	timea=time.Now().Format(TIME_LAYOUT_OFTEN)
+	return timea
+}

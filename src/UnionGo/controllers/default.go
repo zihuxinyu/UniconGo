@@ -4,19 +4,19 @@ import (
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/Library"
 	. "UnionGo/models/portal_user"
+	//"github.com/astaxie/beego"
 	"github.com/astaxie/beego"
-	"fmt"
 )
 
 type MainController struct {
-	beego.Controller
+	BaseController
 
 }
 
 func (this *MainController) Index() {
 
-
-
+	ss:=GetOptions()
+	beego.Debug(ss["key"])
 	this.TplNames = "index.html"
 	this.Render()
 }
@@ -33,16 +33,6 @@ func (this *MainController) Save() {
 }
 
 
-func (this *MainController) Test() {
-
-	this.SetSession("dd",RandomPwd(10))
-	dd:=this.GetSession("dd")
-	fmt.Println("session",dd)
-	fmt.Println("session")
-	this.Data["json"] =dd
-	this.ServeJson()
-
-}
 
 func (this *MainController) Get() {
 

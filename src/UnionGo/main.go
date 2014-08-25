@@ -18,8 +18,7 @@ func init() {
 	dbHost, _ := beego.GetConfig("string", "db_host")
 	dbPort, _ := beego.GetConfig("string", "db_port")
 	dbName, _ := beego.GetConfig("string", "db_name")
-	//	maxIdleConn, _ := beego.AppConfig.Int("db_max_idle_conn")
-	//	maxOpenConn, _ :=  beego.AppConfig.Int( "db_max_open_conn")
+
 	maxIdleConn, _ := beego.GetConfig("int", "db_max_idle_conn")
 	maxOpenConn, _ := beego.GetConfig("int", "db_max_open_conn")
 	dbLink := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbUser, dbPass, dbHost, dbPort, dbName)
@@ -41,6 +40,7 @@ func main() {
 //
 //	beego.InsertFilter("/d/*",beego.BeforeExec,FilterUser)
 	beego.AutoRouter(&controllers.MainController{})
+	beego.AutoRouter(&controllers.OptionController{})
 	beego.Run()
 
 }

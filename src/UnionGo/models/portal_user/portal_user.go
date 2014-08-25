@@ -12,6 +12,7 @@ type Portal_user struct{
 	User_name              string
 	Dpt_name               string
 	Msgexpdate             time.Time `orm:"auto_now_add;type(datetime)"`
+
 }
 
 func init() {

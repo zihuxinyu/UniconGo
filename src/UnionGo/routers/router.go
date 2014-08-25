@@ -1,10 +1,13 @@
 package routers
 
 import (
-	"UnionGo/controllers"
 	"github.com/astaxie/beego"
+	"UnionGo/controllers"
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
+//	beego.Router("/", &controllers.MainController{})
+
+
+	beego.Router("/", &controllers.OptionController{})
 }
