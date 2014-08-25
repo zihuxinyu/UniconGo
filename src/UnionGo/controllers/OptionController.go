@@ -23,8 +23,7 @@ func (this *OptionController) Index() {
 }
 
 func (this *OptionController) Save() {
-
-	data := `{"list":` + this.GetString("data") + `}`
+ 	data := `{"list":` + this.GetString("data") + `}`
 	h := new(Option)
 	diy:=this.GetUserInfo()
 	h.SaveList(data,diy)
@@ -41,6 +40,7 @@ func (this *OptionController) Get() {
 //	pageSize	10
 //	sortField
 //	sortOrder
+	this.GetString("pageIndex")
 	var pulist []Option
 	o := orm.NewOrm()
 	pu := new(Option)

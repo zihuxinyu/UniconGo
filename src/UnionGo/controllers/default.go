@@ -4,7 +4,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/Library"
 	. "UnionGo/models/portal_user"
-	//"github.com/astaxie/beego"
 	"github.com/astaxie/beego"
 )
 

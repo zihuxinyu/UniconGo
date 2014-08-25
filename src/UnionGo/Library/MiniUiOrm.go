@@ -8,7 +8,13 @@ import (
 	"reflect"
 	"strings"
 	"time"
+	"github.com/astaxie/beego"
 )
+
+//返回带前缀的表名
+func TableName(str string) string {
+	return fmt.Sprintf("%s%s", beego.AppConfig.String("dbprefix"), str)
+}
 
 type MiniuiGrid struct {
 	Total int64 `json:"total"`
@@ -28,7 +34,7 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 	for i := 0; i < s.NumField(); i++ {
 		pkFiled := s.Field(i)
 		tags := strings.Split(pkFiled.Tag.Get("orm"), ",")
-		fmt.Println(tags)
+		//fmt.Println(tags)
 		for _, v := range tags {
 			if strings.ContainsAny(v, ";") {
 				for _, vv := range strings.Split(v, ";") {
@@ -54,20 +60,22 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 }
 
 //格式化miniui过来的时间,得到修改过的字段放到m中
-func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.Params,state string ,diys interface {}) error {
+func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.Params, state string , diys interface{}) error {
+
+
 	if !isPtr(obj) {
 		return errors.New(fmt.Sprintf("只支持指针类型，不支持`%T`", obj))
 	}
 	StructType := reflect.TypeOf(obj).Elem() //通过反射获取type定义
 
 	//进行type转换
-	var diy map[string]interface {}
-	diy=diys.(map[string]interface {})
+	var diy map[string]interface{}
+	diy = diys.(map[string]interface{})
 
 
 
 	if state == "modified" {
-//		//修改时删除创建人得信息，因为修改时不能改变创建人信息
+		//		//修改时删除创建人得信息，因为修改时不能改变创建人信息
 		delete(diy, "Creatorid")
 		delete(diy, "Createdate")
 	}
@@ -123,12 +131,13 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 
 ///将miniui过来的数据保存，根据ModelName通过ModelCache模块获得model实例
 //diy:用户信息，包括修改人修改时间等
-func SaveMiniUIData(ModelName string, data string,diy interface {}) {
-
+func SaveMiniUIData(ModelName string, data string, diy interface{}) error {
 	//根据名称获取Model
 	reflecty, _ := ModelCache.Get(ModelName)
 	//得到实例
 	reflectx := reflecty()
+
+
 
 	//整理为可识别格式
 	var dataList DataList
@@ -142,12 +151,23 @@ func SaveMiniUIData(ModelName string, data string,diy interface {}) {
 
 			Params := make(orm.Params)
 			//格式化miniui过来的时间,得到修改过的字段放到m中
-			MiniUIDataUpdate(reflectx, SingleItem, Params,state.(string),diy)
+			MiniUIDataUpdate(reflectx, SingleItem, Params, state.(string), diy)
 
 			switch state {
 			case "modified":
 				pk := GetModelPk(reflectx)
-				orm.NewOrm().QueryTable(reflect.TypeOf(reflectx).Elem().Name()).Filter(pk, SingleItem[pk]).Update(Params)
+				//获取表名，要求必须有TableName方法
+				if tablenameMC := reflect.ValueOf(reflectx).MethodByName("TableName"); tablenameMC.IsValid() {
+					tablename := tablenameMC.Call(nil)[0].Interface().(string)
+					//fmt.Println("dddd",tablename.Interface().(string))
+					//orm.NewOrm().QueryTable(reflect.TypeOf(reflectx).Elem().Name()).Filter(pk, SingleItem[pk]).Update(Params)
+					orm.NewOrm().QueryTable(tablename).Filter(pk, SingleItem[pk]).Update(Params)
+
+				}else {
+					return errors.New(fmt.Sprintf("获取表名，要求必须有TableName方法"))
+
+				}
+
 			case "added":
 				orm.NewOrm().Insert(reflectx)
 			case "removed":
@@ -157,4 +177,5 @@ func SaveMiniUIData(ModelName string, data string,diy interface {}) {
 			}
 		}
 	}
+	return nil
 }

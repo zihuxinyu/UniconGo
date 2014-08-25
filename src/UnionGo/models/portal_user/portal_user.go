@@ -21,7 +21,10 @@ func init() {
 	ModelCache.Set("Portal_user", func() interface{} {return &Portal_user{}})
 
 }
+func (m *Portal_user) TableName() string {
+	return TableName("portal_user")
+}
+func (h Portal_user) SaveList(data string, diy interface{}) {
 
-func (h Portal_user) SaveList(data string,diy interface {}) {
-	SaveMiniUIData("Portal_user", data,diy)
+	SaveMiniUIData("Portal_user", data, diy)
 }
