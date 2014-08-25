@@ -57,10 +57,3 @@ func (this *MainController) Get() {
 	this.ServeJson()
 
 }
-//func (this *MainController) Post() {
-//	u := Portal_user{}
-//	if err := this.ParseForm(&u); err != nil {
-//		//handle error
-//	}
-//
-//}
