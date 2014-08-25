@@ -54,18 +54,22 @@ func GetModelPk(obj interface{}) (pkFiledName string) {
 }
 
 //格式化miniui过来的时间,得到修改过的字段放到m中
-func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.Params) error {
+func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.Params,state string ,diys interface {}) error {
 	if !isPtr(obj) {
 		return errors.New(fmt.Sprintf("只支持指针类型，不支持`%T`", obj))
 	}
 	StructType := reflect.TypeOf(obj).Elem() //通过反射获取type定义
 
-	diy := map[string]string{
-		//"User_name":"都是我",
-		"Creatorid":"weibh",
-		"Createdate":TimeNowString(),
-		"Modifierid":"weibh",
-		"Modifydate":TimeNowString(),
+	//进行type转换
+	var diy map[string]interface {}
+	diy=diys.(map[string]interface {})
+
+
+
+	if state == "modified" {
+//		//修改时删除创建人得信息，因为修改时不能改变创建人信息
+		delete(diy, "Creatorid")
+		delete(diy, "Createdate")
 	}
 
 	for i := 0; i < StructType.NumField(); i++ {
@@ -118,7 +122,9 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 }
 
 ///将miniui过来的数据保存，根据ModelName通过ModelCache模块获得model实例
-func SaveMiniUIData(ModelName string, data string) {
+//diy:用户信息，包括修改人修改时间等
+func SaveMiniUIData(ModelName string, data string,diy interface {}) {
+
 	//根据名称获取Model
 	reflecty, _ := ModelCache.Get(ModelName)
 	//得到实例
@@ -134,17 +140,18 @@ func SaveMiniUIData(ModelName string, data string) {
 
 		if state := SingleItem["_state"]; state != "" {
 
-			m := make(orm.Params)
+			Params := make(orm.Params)
 			//格式化miniui过来的时间,得到修改过的字段放到m中
-			MiniUIDataUpdate(reflectx, SingleItem, m)
+			MiniUIDataUpdate(reflectx, SingleItem, Params,state.(string),diy)
 
 			switch state {
 			case "modified":
 				pk := GetModelPk(reflectx)
-				orm.NewOrm().QueryTable(reflect.TypeOf(reflectx).Elem().Name()).Filter(pk, SingleItem[pk]).Update(m)
+				orm.NewOrm().QueryTable(reflect.TypeOf(reflectx).Elem().Name()).Filter(pk, SingleItem[pk]).Update(Params)
 			case "added":
 				orm.NewOrm().Insert(reflectx)
 			case "removed":
+
 				orm.NewOrm().Delete(reflectx)
 
 			}

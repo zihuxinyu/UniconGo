@@ -11,7 +11,9 @@ func TimeParseOften(value string) (time.Time, error) {
 }
 
 //返回当前时区的当前时间
-func TimeNowString() (timea string) {
-	timea=time.Now().Format(TIME_LAYOUT_OFTEN)
-	return timea
+func TimeLocal() ( time.Time) {
+	stime:=time.Now().Format("2006-01-02 15:04:05 -07:00 ")
+	local, _ := time.LoadLocation("Local")
+	rtime,_:= time.ParseInLocation(TIME_LAYOUT_OFTEN, stime, local)
+	return rtime
 }

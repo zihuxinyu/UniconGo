@@ -7,7 +7,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/Library"
 
-	"fmt"
 )
 
 type OptionController struct {
@@ -27,8 +26,8 @@ func (this *OptionController) Save() {
 
 	data := `{"list":` + this.GetString("data") + `}`
 	h := new(Option)
-
-	h.SaveList(data)
+	diy:=this.GetUserInfo()
+	h.SaveList(data,diy)
 
 	this.Data["json"] = "ok"
 	this.ServeJson()
@@ -48,7 +47,6 @@ func (this *OptionController) Get() {
 	qs := o.QueryTable(pu)
 	qs = qs.Limit(20, 0)
 	qs.All(&pulist)
-	fmt.Println(qs)
 	this.Data["json"] = &MiniuiGrid{1000, &pulist}
 	this.ServeJson()
 

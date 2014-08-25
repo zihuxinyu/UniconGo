@@ -26,8 +26,8 @@ func init() {
 
 }
 
-func (h Option) SaveList(data string) {
-	SaveMiniUIData("Option", data)
+func (h Option) SaveList(data string,diy interface {}) {
+	SaveMiniUIData("Option", data,diy)
 }
 
 func (m *Option) TableName() string {

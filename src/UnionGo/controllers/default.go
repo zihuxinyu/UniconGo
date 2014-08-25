@@ -25,8 +25,8 @@ func (this *MainController) Save() {
 
 	data := `{"list":` + this.GetString("data") + `}`
 	h := new(Portal_user)
-
-	h.SaveList(data)
+	diy:=this.GetUserInfo()
+	h.SaveList(data,diy)
 
 	this.Data["json"] = "ok"
 	this.ServeJson()
@@ -37,6 +37,7 @@ func (this *MainController) Save() {
 func (this *MainController) Get() {
 
 	var pulist []Portal_user
+
 	o := orm.NewOrm()
 	pu := new(Portal_user)
 	qs := o.QueryTable(pu)

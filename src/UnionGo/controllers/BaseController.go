@@ -6,6 +6,7 @@ import (
 	"strings"
 	"github.com/astaxie/beego/orm"
 	. "UnionGo/models"
+	. "UnionGo/Library"
 )
 
 type BaseController struct {
@@ -49,6 +50,22 @@ func (c *BaseController) Json(i interface{}) string {
 	// b, _ := json.MarshalIndent(i, "", " ")
 	b, _ := json.Marshal(i)
 	return string(b)
+}
+
+func (c *BaseController) GetUserInfo() map[string]interface{}{
+	diy := map[string]interface {}{
+		//"User_name":"都是我",
+//		"Creatorid":c.GetSession("User_name").(string),
+//		"Createdate":TimeNowString(),
+//		"Modifierid":c.GetSession("User_name").(string),
+//		"Modifydate":TimeNowString(),
+		"Creatorid":"weibh",
+		"Createdate":TimeLocal(),
+
+		"Modifierid":"weibh",
+		"Modifydate":TimeLocal(),
+	}
+	return diy
 }
 
 

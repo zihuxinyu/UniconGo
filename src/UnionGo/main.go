@@ -27,9 +27,9 @@ func init() {
 }
 
 func main() {
-
 	orm.Debug = true
 	beego.SessionOn = true
+
 //	var FilterUser = func(ctx *context.Context) {
 //		beego.Debug("ddd",ctx.Request.RequestURI)
 //		_, ok := ctx.Input.Session("uid").(int)

@@ -22,6 +22,6 @@ func init() {
 
 }
 
-func (h Portal_user) SaveList(data string) {
-	SaveMiniUIData("Portal_user", data)
+func (h Portal_user) SaveList(data string,diy interface {}) {
+	SaveMiniUIData("Portal_user", data,diy)
 }
