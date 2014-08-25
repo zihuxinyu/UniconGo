@@ -21,7 +21,7 @@ func init() {
 
 	maxIdleConn, _ := beego.GetConfig("int", "db_max_idle_conn")
 	maxOpenConn, _ := beego.GetConfig("int", "db_max_open_conn")
-	dbLink := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbUser, dbPass, dbHost, dbPort, dbName)
+	dbLink := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&loc=%s", dbUser, dbPass, dbHost, dbPort, dbName,"Asia%2FChongqing")
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
 	orm.RegisterDataBase("default", "mysql", dbLink, maxIdleConn.(int), maxOpenConn.(int))
 }
