@@ -41,6 +41,7 @@ func main() {
 //	beego.InsertFilter("/d/*",beego.BeforeExec,FilterUser)
 	beego.AutoRouter(&controllers.MainController{})
 	beego.AutoRouter(&controllers.OptionController{})
+	beego.AutoRouter(&controllers.RedisController{})
 	beego.Run()
 
 }

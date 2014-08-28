@@ -92,9 +92,12 @@ func MiniUIDataUpdate(obj interface{}, SingleItem map[string]interface{}, m orm.
 				//处理为go转换string为时间需要的标准时间格式
 				ss := fmt.Sprintf("%s", SingleItem[f.Name])
 				ss = strings.Replace(ss, "T", " ", -1)
-				ss = ss+" +08:00"
+
+				if !strings.Contains(ss,"+08:00") {
+					ss = ss+" +08:00"
+				}
 				//fmt.Println("时间格式整理"+ss)
-				//ss = strings.Replace(ss, "+08:00", " +08:00", -1)
+				ss = strings.Replace(ss, "+08:00", " +08:00", -1)
 
 				t, _ := time.Parse("2006-01-02 15:04:05 -07:00 ", ss)
 

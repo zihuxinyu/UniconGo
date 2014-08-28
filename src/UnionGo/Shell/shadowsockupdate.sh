@@ -1,0 +1,1 @@
+ps -ef|grep ./server|grep -v grep|awk '{printf $2}'|xargs kill -1
